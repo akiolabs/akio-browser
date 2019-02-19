@@ -1,0 +1,10 @@
+{
+  "name": "akio-browser",
+  "private": true,
+  "version": "0.0.1",
+  "dependencies": {
+    "handy-api": "1.5.7"
+  },
+  "scripts": {
+  }
+}

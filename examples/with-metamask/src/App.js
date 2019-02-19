@@ -10,6 +10,7 @@ class App extends Component {
   async componentDidMount() {
     this.akio = await Akio.init({
       token: 'example-with-metamask',
+      verbose: true,
     });
   }
 

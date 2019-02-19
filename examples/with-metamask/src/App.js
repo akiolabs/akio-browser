@@ -1,8 +1,18 @@
+// Libraries
 import React, { Component } from 'react';
+import Akio from 'akio-browser';
+
+// Assets
 import logo from './logo.svg';
 import './App.css';
 
 class App extends Component {
+  async componentDidMount() {
+    this.akio = await Akio.init({
+      token: 'example-with-metamask',
+    });
+  }
+
   render() {
     return (
       <div className="App">

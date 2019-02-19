@@ -5,8 +5,10 @@ import API from 'handy-api';
 import {DEFAULT_CONFIG} from './config';
 
 class Akio {
-  async static init({token, ...config} = {}) {
-    return new Akio({token, config}).init();
+  static async init({token, ...config} = {}) {
+    const akio = new Akio({token, config});
+    await akio.init();
+    return akio;
   }
 
   constructor({token, config} = {}) {
@@ -23,7 +25,7 @@ class Akio {
     }
   }
 
-  async async init() {
+  async init() {
     const {token} = this;
 
     this.log(`init with token: ${token}.`);

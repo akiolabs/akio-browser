@@ -12,6 +12,14 @@ class App extends Component {
       token: 'example-with-metamask',
       verbose: true,
     });
+
+    await this.akio.identify({
+      userId: 'test-user',
+    });
+
+    await this.akio.track({
+      event: 'Viewed Home Page',
+    });
   }
 
   render() {

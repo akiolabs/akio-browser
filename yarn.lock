@@ -74,6 +74,11 @@ jolt-lodash@^2.7.7:
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
 
+locale2@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/locale2/-/locale2-2.3.1.tgz#964c5d49b3cd6bbe6ff8a34379631fc7393c356f"
+  integrity sha512-DzVipL/J/W/vXdm3Hy8pFGFuUUBN/uzLUvyJp2Swes4AKdckI2runfdde8FgibIzs+rH9TAAZ2G917r5rOUNYA==
+
 lodash@^4.17.4:
   version "4.17.11"
   resolved "https://registry.yarnpkg.com/lodash/-/lodash-4.17.11.tgz#b39ea6229ef607ecd89e2c8df12536891cac9b8d"

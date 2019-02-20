@@ -1,5 +1,14 @@
+// Libraries
+import {detect} from 'detect-browser';
+import locale2 from 'locale2'
+
+// SDK
+import packageJSON from '../package.json';
+
+// Ex. https://www.google.com/some-path --> www.google.com
 export const getReferringDomain = (referrer) => {
-  // TODO
+  const parts = referrer.split('/');
+  return parts.length >= 3 ? parts[2] : '';
 };
 
 export const getReferrerInfo = () => {
@@ -13,16 +22,18 @@ export const getReferrerInfo = () => {
 };
 
 export const getBrowserInfo = () => {
+  const browser = detect() || {};
+
   return {
     currentUrl: window.location.href,
-    browser: 'Chrome',
-    browserVersion: 71,
+    browser: browser.name,
+    browserVersion: browser.version,
+    os: browser.os,
   };
 };
 
-export const getComputerInfo = () => {
+export const getDeviceInfo = () => {
   return {
-    os: 'Mac OS X',
     screenHeight: window.screen.height,
     screenWidth: window.screen.width,
   };
@@ -32,22 +43,22 @@ export const getLibraryInfo = () => {
   return {
     platform: 'web',
     library: 'web',
-    libraryVersion: '2.22.4',
+    libraryVersion: packageJSON.version,
   };
 };
 
-export const getLanguageInfo = () => {
+export const getLocaleInfo = () => {
   return {
-    language: 'EN_US',
+    locale: locale2,
   };
 };
 
 export const getSourceInfo = () => ({
   ...getReferrerInfo(),
   ...getBrowserInfo(),
-  ...getComputerInfo(),
+  ...getDeviceInfo(),
   ...getLibraryInfo(),
-  ...getLanguageInfo(),
+  ...getLocaleInfo(),
 });
 
 export const getTimestamp = () => {

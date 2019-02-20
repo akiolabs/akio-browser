@@ -6,6 +6,7 @@
   "dependencies": {
     "detect-browser": "4.1.0",
     "handy-api": "1.5.7",
+    "locale2": "2.3.1",
     "snakecase-keys": "2.1.0"
   },
   "scripts": {

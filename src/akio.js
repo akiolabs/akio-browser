@@ -1,8 +1,11 @@
 // Libraries
 import API from 'handy-api';
+import snakecaseKeys from 'snakecase-keys';
 
 // Config
 import {DEFAULT_CONFIG} from './config';
+
+const AKIO_SESSION_ID_KEY = 'akio_session_id';
 
 class Akio {
   static async init({token, ...config} = {}) {
@@ -13,6 +16,8 @@ class Akio {
 
   constructor({token, config} = {}) {
     this.token = token;
+    this.sessionId = this.getCookie({key: AKIO_SESSION_ID_KEY});
+    this.userId = null;
     this.config = {...DEFAULT_CONFIG, ...config};
     this.api = new API({
       baseUrl: this.config.apiHost,
@@ -25,26 +30,48 @@ class Akio {
     }
   }
 
+  getCookie({key}) {
+    // TODO
+  }
+
+  saveCookie({key, value}) {
+    // TODO
+  }
+
   async init() {
-    const {token} = this;
+    const {token, sessionId} = this;
 
     this.log(`init with token: ${token}.`);
-    return this.post({
-      path: '/init',
-      params: {
-        token,
-      },
-    });
+    try {
+      const response = await this.post({
+        path: '/init',
+        params: {
+          token,
+          sessionId,
+        },
+      });
+
+      // Parse the response as JSON.
+      const json = await response.json();
+
+      // If we get a valid response, save the sessionId.
+      this.sessionId = json.sessionId;
+      this.saveCookie({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
+    } catch (error) {
+      this.log(`Failed to init: ${error.message}`);
+    }
   }
 
   async identify({userId} = {}) {
+    const {token} = this;
     this.userId = userId;
 
     this.log(`identify with userId: ${userId}.`);
     return this.post({
       path: '/identify',
       params: {
-        // TODO
+        token,
+        userId,
       },
     })
   }
@@ -61,11 +88,13 @@ class Akio {
   }
 
   async post({path, params} = {}) {
-    this.api.request({
+    return this.api.request({
       method: 'POST',
       path,
-      headers: {},
-      params,
+      headers: {
+        'Content-Type': 'application/json',
+      },
+      params: snakecaseKeys(params),
     });
   }
 }

@@ -4,7 +4,8 @@
   "version": "0.0.1",
   "main": "src/akio.js",
   "dependencies": {
-    "handy-api": "1.5.7"
+    "handy-api": "1.5.7",
+    "snakecase-keys": "2.1.0"
   },
   "scripts": {
   }

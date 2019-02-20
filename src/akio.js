@@ -62,7 +62,7 @@ class Akio {
     }
   }
 
-  async identify({userId, userAddress} = {}) {
+  async identify({userId, userAddress, ...properties} = {}) {
     const {token, sessionId} = this;
     this.userId = userId;
 
@@ -74,6 +74,10 @@ class Akio {
         sessionId,
         userId,
         userAddress,
+        source: {
+          // TODO
+        },
+        properties,
       },
     })
   }
@@ -96,7 +100,10 @@ class Akio {
       headers: {
         'Content-Type': 'application/json',
       },
-      params: snakecaseKeys(params),
+
+      // Convert the keys of the params to snakecase. We want to allow nested
+      // keys to be user-defined - camelCase or with spaces are both valid.
+      params: snakecaseKeys(params, {deep: false}),
     });
   }
 }

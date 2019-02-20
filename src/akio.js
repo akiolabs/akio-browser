@@ -9,7 +9,7 @@ import {cookie, localStorage, noStorage} from './storage';
 import {getSourceInfo, getTimestamp} from './utils';
 
 // Constants
-const AKIO_SESSION_ID_KEY = 'akio_session_id';
+const AKIO_SESSION_ID_KEY = '_akio';
 
 class Akio {
   static async init({token, ...config} = {}) {

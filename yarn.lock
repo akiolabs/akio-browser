@@ -2,6 +2,11 @@
 # yarn lockfile v1
 
 
+detect-browser@4.1.0:
+  version "4.1.0"
+  resolved "https://registry.yarnpkg.com/detect-browser/-/detect-browser-4.1.0.tgz#4f1cd47952be8fb16511053c37275f513b96d74a"
+  integrity sha512-YKQf1QQDXXJrwNE07xHujoD+meBnjhsYFdPwxFEXS1ylJWD9GKd21lKBjuqtXzAkz4CQjwBO3DYXBU/wWwZCGA==
+
 encoding@^0.1.11:
   version "0.1.12"
   resolved "https://registry.yarnpkg.com/encoding/-/encoding-0.1.12.tgz#538b66f3ee62cd1ab51ec323829d1f9480c74beb"
@@ -68,6 +73,11 @@ jolt-lodash@^2.7.7:
   version "4.0.0"
   resolved "https://registry.yarnpkg.com/js-tokens/-/js-tokens-4.0.0.tgz#19203fb59991df98e3a287050d4647cdeaf32499"
   integrity sha512-RdJUflcE3cUzKiMqQgsCu06FPu9UdIJO0beYbPhHN4k6apgJtifcoCtT9bcxOpYBtpD2kCM6Sbzg4CausW/PKQ==
+
+locale2@2.3.1:
+  version "2.3.1"
+  resolved "https://registry.yarnpkg.com/locale2/-/locale2-2.3.1.tgz#964c5d49b3cd6bbe6ff8a34379631fc7393c356f"
+  integrity sha512-DzVipL/J/W/vXdm3Hy8pFGFuUUBN/uzLUvyJp2Swes4AKdckI2runfdde8FgibIzs+rH9TAAZ2G917r5rOUNYA==
 
 lodash@^4.17.4:
   version "4.17.11"

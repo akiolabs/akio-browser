@@ -93,7 +93,7 @@ class Akio {
 
       // If we get a valid response, save the session_id.
       this.sessionId = json.session_id;
-      this.storage.update({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
+      this.storage.set({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
     } catch (error) {
       this.logger.error(`Failed to init: ${error.message}`);
     }

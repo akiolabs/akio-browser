@@ -68,9 +68,34 @@ class Akio {
    * user and event object.
    */
   getSource() {
-    return {
-      // TODO
-    };
+    return snakecaseKeys({
+      // URL
+      currentUrl: 'https://insights.akiolabs.com/explore',
+      initialReferrer: '$direct',
+      initialReferringDomain: '$direct',
+
+      // Browser
+      browser: 'Chrome',
+      browserVersion: 71,
+
+      // Computer
+      os: 'Mac OS X',
+      screenHeight: 1200,
+      screenWidth: 1920,
+
+      // Library
+      platform: 'web',
+      library: 'web',
+      libraryVersion: '2.22.4',
+
+      // i18n
+      language: 'EN_US',
+    });
+  }
+
+  getTimestamp() {
+    const now = new Date();
+    return Math.floor(now.valueOf() / 1000);
   }
 
   async init() {
@@ -135,6 +160,7 @@ class Akio {
     return this.post({
       path: '/track',
       params: {
+        timestamp: this.getTimestamp(),
         trackerToken: token,
         sessionId,
         userId,

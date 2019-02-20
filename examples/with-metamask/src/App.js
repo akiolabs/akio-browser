@@ -9,12 +9,12 @@ import './App.css';
 class App extends Component {
   async componentDidMount() {
     this.akio = await Akio.init({
-      token: 'example-with-metamask',
+      token: 'your-token-here',
       verbose: true,
     });
 
     await this.akio.identify({
-      userId: 'test-user',
+      userId: 'test@example.com',
     });
 
     await this.akio.track({

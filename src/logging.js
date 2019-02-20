@@ -1,7 +1,7 @@
 class Logger {
   constructor({debug, verbose}) {
-    this.debug = debug;
-    this.verbose = verbose;
+    this._debug = debug;
+    this._verbose = verbose;
   }
 
   log(message) {
@@ -13,13 +13,13 @@ class Logger {
   }
 
   verbose(message) {
-    if (this.verbose) {
+    if (this._verbose) {
       this.log(message);
     }
   }
 
   debug(message) {
-    if (this.debug) {
+    if (this._debug) {
       this.log(message);
     }
   }

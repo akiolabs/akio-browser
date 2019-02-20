@@ -2,8 +2,10 @@
 import API from 'handy-api';
 import snakecaseKeys from 'snakecase-keys';
 
-// Config
+// SDK
 import {DEFAULT_CONFIG} from './config';
+import {cookie, localStorage, noStorage} from './storage';
+import {Logger} from './utils';
 
 // Constants
 const AKIO_SESSION_ID_KEY = 'akio_session_id';
@@ -19,6 +21,7 @@ class Akio {
     // Configure the SDK with user-defined config and also initialize the
     // API connection.
     this.config = {...DEFAULT_CONFIG, ...config};
+    this.logger = new Logger({debug: this.config.debug, verbose: this.config.verbose});
     this.storage = this.getStorage();
     this.api = new API({
       baseUrl: this.config.apiHost,
@@ -31,9 +34,15 @@ class Akio {
     this.source = this.getSource();
   }
 
-  log(message) {
-    if (this.config.verbose) {
-      console.log(`[Akio] ${message}`);
+  getStorageType() {
+    const {persistence} = this.config;
+    switch (persistence) {
+      case 'cookie':
+      case 'localStorage':
+        return persistence;
+      default:
+        this.logger.error(`Unknown persistence type: ${persistence}. Falling back to 'cookie'.`);
+        return 'cookie';
     }
   }
 
@@ -42,14 +51,16 @@ class Akio {
    * or localStorage.
    */
   getStorage() {
-    return {
-      get({key}) {
-        // TODO
-      },
-      update({key, value}) {
-        // TODO
-      },
-    };
+    const storageType = this.getStorageType();
+
+    switch (storageType) {
+      case 'cookie':
+        return cookie;
+      case 'localStorage':
+        return localStorage;
+      default:
+        return noStorage;
+    }
   }
 
   /**
@@ -65,7 +76,7 @@ class Akio {
   async init() {
     const {token, sessionId} = this;
 
-    this.log(`init with token: ${token}.`);
+    this.logger.verbose(`init with token: ${token}.`);
     try {
       const response = await this.post({
         path: '/init',
@@ -82,7 +93,7 @@ class Akio {
       this.sessionId = json.session_id;
       this.storage.update({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
     } catch (error) {
-      this.log(`Failed to init: ${error.message}`);
+      this.logger.error(`Failed to init: ${error.message}`);
     }
   }
 
@@ -91,7 +102,7 @@ class Akio {
     this.userId = userId;
     this.userAddress = userAddress;
 
-    this.log(`identify with userId: ${userId}.`);
+    this.logger.verbose(`identify with userId: ${userId}.`);
     return this.post({
       path: '/identify',
       params: {
@@ -108,7 +119,7 @@ class Akio {
   async track({event, ...properties} = {}) {
     const {token, sessionId, userId, userAddress, source} = this;
 
-    this.log(`track with event: ${event}.`);
+    this.logger.verbose(`track with event: ${event}.`);
     return this.post({
       path: '/track',
       params: {

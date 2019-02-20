@@ -3,4 +3,5 @@ export const DEFAULT_CONFIG = {
   apiHost: 'https://data.akiolabs.com',
   verbose: false,
   debug: false,
+  persistence: 'cookie',
 };

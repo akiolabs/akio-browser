@@ -32,3 +32,7 @@ class Logger {
 export {
   Logger,
 };
+
+export const getReferringDomain = (referrer) => {
+  // TODO
+};

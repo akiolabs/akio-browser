@@ -5,7 +5,7 @@ import snakecaseKeys from 'snakecase-keys';
 // SDK
 import {DEFAULT_CONFIG} from './config';
 import {cookie, localStorage, noStorage} from './storage';
-import {Logger} from './utils';
+import {Logger, getReferringDomain} from './utils';
 
 // Constants
 const AKIO_SESSION_ID_KEY = 'akio_session_id';
@@ -31,7 +31,6 @@ class Akio {
     this.token = token;
     this.sessionId = this.storage.get({key: AKIO_SESSION_ID_KEY});
     this.userId = null;
-    this.source = this.getSource();
   }
 
   getStorageType() {
@@ -63,33 +62,57 @@ class Akio {
     }
   }
 
+  getReferrerInfo() {
+    const referrer = document.referrer || '$direct';
+    const referringDomain = getReferringDomain(referrer) || '$direct';
+
+    return {
+      initialReferrer: referrer,
+      initialReferringDomain: referringDomain,
+    };
+  }
+
+  getBrowserInfo() {
+    return {
+      currentUrl: window.location.href,
+      browser: 'Chrome',
+      browserVersion: 71,
+    };
+  }
+
+  getComputerInfo() {
+    return {
+      os: 'Mac OS X',
+      screenHeight: 1200,
+      screenWidth: 1920,
+    };
+  }
+
+  getLibraryInfo() {
+    return {
+      platform: 'web',
+      library: 'web',
+      libraryVersion: '2.22.4',
+    };
+  }
+
+  getLanguageInfo() {
+    return {
+      language: 'EN_US',
+    };
+  }
+
   /**
    * Returns the browser info for the current session which we add to each
    * user and event object.
    */
   getSource() {
     return snakecaseKeys({
-      // URL
-      currentUrl: 'https://insights.akiolabs.com/explore',
-      initialReferrer: '$direct',
-      initialReferringDomain: '$direct',
-
-      // Browser
-      browser: 'Chrome',
-      browserVersion: 71,
-
-      // Computer
-      os: 'Mac OS X',
-      screenHeight: 1200,
-      screenWidth: 1920,
-
-      // Library
-      platform: 'web',
-      library: 'web',
-      libraryVersion: '2.22.4',
-
-      // i18n
-      language: 'EN_US',
+      ...getReferrerInfo(),
+      ...getBrowserInfo(),
+      ...getComputerInfo(),
+      ...getLibraryInfo(),
+      ...getLanguageInfo(),
     });
   }
 
@@ -127,9 +150,13 @@ class Akio {
   }
 
   async identify({userId, userAddress, ...properties} = {}) {
-    const {token, sessionId, source} = this;
+    const {token, sessionId} = this;
     this.userId = userId;
     this.userAddress = userAddress;
+
+    if (!token || !sessionId) {
+      return this.logger.error(`Called 'identify' before successful 'init'.`);
+    }
 
     if (!userId) {
       return this.logger.error(`'identify' missing required parameter 'userId'.`)
@@ -143,14 +170,18 @@ class Akio {
         sessionId,
         userId,
         userAddress,
-        source,
+        source: this.getSource(),
         properties,
       },
     })
   }
 
   async track({event, ...properties} = {}) {
-    const {token, sessionId, userId, userAddress, source} = this;
+    const {token, sessionId, userId, userAddress} = this;
+
+    if (!token || !sessionId) {
+      return this.logger.error(`Called 'track' before successful 'init'.`);
+    }
 
     if (!event) {
       return this.logger.error(`'track' missing required parameter 'event'.`)
@@ -166,7 +197,7 @@ class Akio {
         userId,
         userAddress,
         event,
-        source,
+        source: this.getSource(),
         properties,
       },
     });

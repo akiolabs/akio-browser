@@ -4,6 +4,7 @@
   "version": "0.0.1",
   "main": "src/akio.js",
   "dependencies": {
+    "browser-cookies": "1.2.0",
     "detect-browser": "4.1.0",
     "handy-api": "1.5.7",
     "locale2": "2.3.1",

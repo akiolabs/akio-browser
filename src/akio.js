@@ -9,7 +9,7 @@ import {cookie, localStorage, noStorage} from './storage';
 import {getSourceInfo, getTimestamp} from './utils';
 
 // Constants
-const AKIO_SESSION_ID_KEY = 'akio_session_id';
+const AKIO_SESSION_ID_KEY = '_akio';
 
 class Akio {
   static async init({token, ...config} = {}) {
@@ -93,7 +93,7 @@ class Akio {
 
       // If we get a valid response, save the session_id.
       this.sessionId = json.session_id;
-      this.storage.update({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
+      this.storage.set({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
     } catch (error) {
       this.logger.error(`Failed to init: ${error.message}`);
     }

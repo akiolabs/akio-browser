@@ -4,8 +4,9 @@ import snakecaseKeys from 'snakecase-keys';
 
 // SDK
 import {DEFAULT_CONFIG} from './config';
+import {Logger} from './logging';
 import {cookie, localStorage, noStorage} from './storage';
-import {Logger, getReferringDomain} from './utils';
+import {getSourceInfo, getTimestamp} from './utils';
 
 // Constants
 const AKIO_SESSION_ID_KEY = 'akio_session_id';
@@ -62,63 +63,12 @@ class Akio {
     }
   }
 
-  getReferrerInfo() {
-    const referrer = document.referrer || '$direct';
-    const referringDomain = getReferringDomain(referrer) || '$direct';
-
-    return {
-      initialReferrer: referrer,
-      initialReferringDomain: referringDomain,
-    };
-  }
-
-  getBrowserInfo() {
-    return {
-      currentUrl: window.location.href,
-      browser: 'Chrome',
-      browserVersion: 71,
-    };
-  }
-
-  getComputerInfo() {
-    return {
-      os: 'Mac OS X',
-      screenHeight: 1200,
-      screenWidth: 1920,
-    };
-  }
-
-  getLibraryInfo() {
-    return {
-      platform: 'web',
-      library: 'web',
-      libraryVersion: '2.22.4',
-    };
-  }
-
-  getLanguageInfo() {
-    return {
-      language: 'EN_US',
-    };
-  }
-
   /**
    * Returns the browser info for the current session which we add to each
    * user and event object.
    */
   getSource() {
-    return snakecaseKeys({
-      ...getReferrerInfo(),
-      ...getBrowserInfo(),
-      ...getComputerInfo(),
-      ...getLibraryInfo(),
-      ...getLanguageInfo(),
-    });
-  }
-
-  getTimestamp() {
-    const now = new Date();
-    return Math.floor(now.valueOf() / 1000);
+    return snakecaseKeys(getSourceInfo());
   }
 
   async init() {
@@ -191,7 +141,7 @@ class Akio {
     return this.post({
       path: '/track',
       params: {
-        timestamp: this.getTimestamp(),
+        timestamp: getTimestamp(),
         trackerToken: token,
         sessionId,
         userId,

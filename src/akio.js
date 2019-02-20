@@ -76,7 +76,11 @@ class Akio {
   async init() {
     const {token, sessionId} = this;
 
-    this.logger.verbose(`init with token: ${token}.`);
+    if (!token) {
+      return this.logger.error(`'init' missing required parameter 'token'.`)
+    }
+
+    this.logger.verbose(`'init' with token: ${token}.`);
     try {
       const response = await this.post({
         path: '/init',
@@ -102,7 +106,11 @@ class Akio {
     this.userId = userId;
     this.userAddress = userAddress;
 
-    this.logger.verbose(`identify with userId: ${userId}.`);
+    if (!userId) {
+      return this.logger.error(`'identify' missing required parameter 'userId'.`)
+    }
+
+    this.logger.verbose(`'identify' with userId: ${userId}.`);
     return this.post({
       path: '/identify',
       params: {
@@ -119,7 +127,11 @@ class Akio {
   async track({event, ...properties} = {}) {
     const {token, sessionId, userId, userAddress, source} = this;
 
-    this.logger.verbose(`track with event: ${event}.`);
+    if (!event) {
+      return this.logger.error(`'track' missing required parameter 'event'.`)
+    }
+
+    this.logger.verbose(`'track' with event: ${event}.`);
     return this.post({
       path: '/track',
       params: {

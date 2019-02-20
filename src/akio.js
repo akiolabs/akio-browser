@@ -54,16 +54,16 @@ class Akio {
       // Parse the response as JSON.
       const json = await response.json();
 
-      // If we get a valid response, save the sessionId.
-      this.sessionId = json.sessionId;
+      // If we get a valid response, save the session_id.
+      this.sessionId = json.session_id;
       this.saveCookie({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
     } catch (error) {
       this.log(`Failed to init: ${error.message}`);
     }
   }
 
-  async identify({userId} = {}) {
-    const {token} = this;
+  async identify({userId, userAddress} = {}) {
+    const {token, sessionId} = this;
     this.userId = userId;
 
     this.log(`identify with userId: ${userId}.`);
@@ -71,7 +71,9 @@ class Akio {
       path: '/identify',
       params: {
         token,
+        sessionId,
         userId,
+        userAddress,
       },
     })
   }

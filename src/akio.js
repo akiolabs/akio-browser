@@ -5,6 +5,7 @@ import snakecaseKeys from 'snakecase-keys';
 // Config
 import {DEFAULT_CONFIG} from './config';
 
+// Constants
 const AKIO_SESSION_ID_KEY = 'akio_session_id';
 
 class Akio {
@@ -15,27 +16,50 @@ class Akio {
   }
 
   constructor({token, config} = {}) {
-    this.token = token;
-    this.sessionId = this.getCookie({key: AKIO_SESSION_ID_KEY});
-    this.userId = null;
+    // Configure the SDK with user-defined config and also initialize the
+    // API connection.
     this.config = {...DEFAULT_CONFIG, ...config};
+    this.storage = this.getStorage();
     this.api = new API({
       baseUrl: this.config.apiHost,
     });
+
+    // Load up the user and source information from the browser / storage.
+    this.token = token;
+    this.sessionId = this.storage.get({key: AKIO_SESSION_ID_KEY});
+    this.userId = null;
+    this.source = this.getSource();
   }
 
   log(message) {
     if (this.config.verbose) {
-      console.log(`[Akio]: ${message}`);
+      console.log(`[Akio] ${message}`);
     }
   }
 
-  getCookie({key}) {
-    // TODO
+  /**
+   * Returns the storage medium based on developer preference. Either cookies
+   * or localStorage.
+   */
+  getStorage() {
+    return {
+      get({key}) {
+        // TODO
+      },
+      update({key, value}) {
+        // TODO
+      },
+    };
   }
 
-  saveCookie({key, value}) {
-    // TODO
+  /**
+   * Returns the browser info for the current session which we add to each
+   * user and event object.
+   */
+  getSource() {
+    return {
+      // TODO
+    };
   }
 
   async init() {
@@ -56,15 +80,16 @@ class Akio {
 
       // If we get a valid response, save the session_id.
       this.sessionId = json.session_id;
-      this.saveCookie({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
+      this.storage.update({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
     } catch (error) {
       this.log(`Failed to init: ${error.message}`);
     }
   }
 
   async identify({userId, userAddress, ...properties} = {}) {
-    const {token, sessionId} = this;
+    const {token, sessionId, source} = this;
     this.userId = userId;
+    this.userAddress = userAddress;
 
     this.log(`identify with userId: ${userId}.`);
     return this.post({
@@ -74,21 +99,26 @@ class Akio {
         sessionId,
         userId,
         userAddress,
-        source: {
-          // TODO
-        },
+        source,
         properties,
       },
     })
   }
 
-  async track({event} = {}) {
-    // TODO
+  async track({event, ...properties} = {}) {
+    const {token, sessionId, userId, userAddress, source} = this;
+
     this.log(`track with event: ${event}.`);
     return this.post({
       path: '/track',
       params: {
-        // TODO
+        trackerToken: token,
+        sessionId,
+        userId,
+        userAddress,
+        event,
+        source,
+        properties,
       },
     });
   }

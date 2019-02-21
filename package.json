@@ -2,7 +2,7 @@
   "name": "akio-browser",
   "private": true,
   "version": "0.0.1",
-  "main": "src/akio.js",
+  "main": "build/akio.js",
   "dependencies": {
     "browser-cookies": "1.2.0",
     "detect-browser": "4.1.0",
@@ -10,6 +10,18 @@
     "locale2": "2.3.1",
     "snakecase-keys": "2.1.0"
   },
+  "devDependencies": {
+    "@babel/cli": "7.2.3",
+    "@babel/core": "7.3.3",
+    "@babel/preset-env": "7.3.1",
+    "rimraf": "2.6.3"
+  },
+  "babel": {
+    "presets": ["@babel/preset-env"]
+  },
   "scripts": {
+    "build": "babel src --out-dir build --ignore '**/*.spec.js'",
+    "clean": "rimraf build",
+    "prepublishOnly": "yarn run clean && yarn run build"
   }
 }

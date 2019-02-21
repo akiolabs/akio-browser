@@ -79,24 +79,24 @@ class Akio {
     }
 
     this.logger.verbose(`'init' with token: ${token}.`);
-    try {
-      const response = await this.post({
-        path: '/init',
-        params: {
-          token,
-          sessionId,
-        },
-      });
+    const response = await this.post({
+      path: '/init',
+      params: {
+        token,
+        sessionId,
+      },
+    });
 
-      // Parse the response as JSON.
-      const json = await response.json();
+    // Parse the response as JSON.
+    const json = await response.json();
 
-      // If we get a valid response, save the session_id.
-      this.sessionId = json.session_id;
-      this.storage.set({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
-    } catch (error) {
-      this.logger.error(`Failed to init: ${error.message}`);
+    if (response.status !== 200) {
+      return this.logger.error(`Failed to init: ${json.error}`);
     }
+
+    // If we get a valid response, save the session_id.
+    this.sessionId = json.session_id;
+    this.storage.set({key: AKIO_SESSION_ID_KEY, value: this.sessionId});
   }
 
   async identify({userId, userAddress, ...properties} = {}) {

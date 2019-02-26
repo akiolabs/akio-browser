@@ -32,6 +32,12 @@ const akio = Akio.init({
 
 Other `init` options:
 
+Option | Values | Description
+-------|--------| -----------
+verbose | `true` / `false` | Set to `true` to enable verbose logging.
+debug | `true` / `false` | Set to `true` to enable debug logging.
+persistence | `'cookie'` / `'localStorage'` | Specify the preferred storage medium for tracking sessions.
+
 ### Identify
 
 To identify a specific user on your application, provide a unique `userId` for each user. You may also pass a user's wallet address as `userAddress` to automatically join with on-chain data on Akio Insights.
@@ -59,4 +65,4 @@ akio.track({
 
 ## Contact
 
-If you have any questions or would like to get early-access to the SDK, contact us at [team@akiolabs.com](team@akiolabs.com).
+If you have any questions or would like to get early-access to the SDK, contact us at [team@akiolabs.com](mailto:team@akiolabs.com).

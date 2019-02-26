@@ -1,6 +1,6 @@
 {
   "name": "akio-browser",
-  "version": "0.0.2",
+  "version": "0.1.0",
   "main": "build/akio.js",
   "dependencies": {
     "browser-cookies": "1.2.0",

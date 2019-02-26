@@ -74,12 +74,9 @@ class Akio {
     // Re-initializing the SDK should re-set it up.
     this.setUp(config);
 
+    // If this SDK has been init'd before, it will have a stored sessionId.
     const {sessionId} = this;
     this.token = token;
-
-    if (!sessionId) {
-      return this.logger.error(`Error initializing Akio SDK.`);
-    }
 
     if (!token) {
       return this.logger.error(`'init' missing required parameter 'token'.`)

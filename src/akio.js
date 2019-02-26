@@ -12,13 +12,13 @@ import {getSourceInfo, getTimestamp} from './utils';
 const AKIO_SESSION_ID_KEY = '_akio';
 
 class Akio {
-  static async init({token, ...config} = {}) {
-    const akio = new Akio({token, config});
-    await akio.init();
+  static async init(options = {}) {
+    const akio = new Akio();
+    await akio.init(options);
     return akio;
   }
 
-  constructor({token, config} = {}) {
+  setUp(config = {}) {
     // Configure the SDK with user-defined config and also initialize the
     // API connection.
     this.config = {...DEFAULT_CONFIG, ...config};
@@ -29,7 +29,6 @@ class Akio {
     });
 
     // Load up the user and source information from the browser / storage.
-    this.token = token;
     this.sessionId = this.storage.get({key: AKIO_SESSION_ID_KEY});
     this.userId = null;
   }
@@ -71,8 +70,16 @@ class Akio {
     return snakecaseKeys(getSourceInfo());
   }
 
-  async init() {
-    const {token, sessionId} = this;
+  async init({token, ...config}) {
+    // Re-initializing the SDK should re-set it up.
+    this.setUp(config);
+
+    const {sessionId} = this;
+    this.token = token;
+
+    if (!sessionId) {
+      return this.logger.error(`Error initializing Akio SDK.`);
+    }
 
     if (!token) {
       return this.logger.error(`'init' missing required parameter 'token'.`)

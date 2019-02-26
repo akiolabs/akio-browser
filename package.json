@@ -3,6 +3,7 @@
   "version": "0.1.0",
   "main": "build/akio.js",
   "dependencies": {
+    "@babel/polyfill": "7.2.5",
     "browser-cookies": "1.2.0",
     "detect-browser": "4.1.0",
     "handy-api": "1.5.7",
@@ -16,7 +17,9 @@
     "rimraf": "2.6.3"
   },
   "babel": {
-    "presets": ["@babel/preset-env"]
+    "presets": [
+      ["@babel/preset-env", {"useBuiltIns": "usage"}]
+    ]
   },
   "scripts": {
     "build": "babel src --out-dir build --ignore '**/*.spec.js'",

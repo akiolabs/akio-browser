@@ -1,6 +1,6 @@
 {
   "name": "akio-browser",
-  "version": "0.3.0",
+  "version": "0.4.0",
   "main": "build/akio.js",
   "dependencies": {
     "@babel/polyfill": "7.2.5",

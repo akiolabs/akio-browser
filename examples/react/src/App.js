@@ -10,11 +10,11 @@ class App extends Component {
   async componentDidMount() {
     this.akio = await Akio.init({
       token: 'your-token-here',
-      verbose: true,
     });
 
     await this.akio.identify({
       userId: 'test@example.com',
+      userAddress: '0xethereumaddresshere',
     });
 
     await this.akio.track({

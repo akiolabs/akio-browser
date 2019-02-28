@@ -36,9 +36,7 @@ await akio.track({
 });
 ```
 
-For more options, see the Advanced Usage section below for more details.
-
-## Advanced Usage
+## Options
 
 The `Akio` object contains 3 main methods:
 

@@ -10,13 +10,35 @@ This library is available as a [package on NPM](https://www.npmjs.com/package/ak
 yarn add akio-browser
 ```
 
-## Usage
+## Getting Started
 
-Once the package is installed, import it like a normal Node.js module.
+To get started, import the `Akio` object from `akio-browser` like a normal Node.js module.
 
 ```js
+// Step 1: Import the library.
 import Akio from 'akio-browser';
+
+// Step 2: Initialize Akio with your token that you created on Akio Insights.
+const akio = await Akio.init({
+  token: 'your-token-here',
+});
+
+// Step 3: Identify a unique user by passing in a userId and an optional userAddress.
+// Passing in a userAddress will automatically link your user with on-chain data.
+await akio.identify({
+  userId: 'user@example.com',
+  userAddress: '0xdf215d5794bd2fb6eab88d05aabcbc8766ef4480',
+});
+
+// Step 4: Track a web event by passing in the event name.
+await akio.track({
+  event: 'Viewed Home Page',
+});
 ```
+
+For more options, see the Advanced Usage section below for more details.
+
+## Advanced Usage
 
 The `Akio` object contains 3 main methods:
 

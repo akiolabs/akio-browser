@@ -23,7 +23,8 @@ const akio = await Akio.init({
   token: 'your-token-here',
 });
 
-// Step 3: Identify a unique user by passing in a userId and an optional userAddress.
+// Step 3: Identify a unique user by passing in a required userId and an optional userAddress.
+// If your app has no concept of a userId, you may provide the userAddress for both fields.
 // Passing in a userAddress will automatically link your user with on-chain data.
 await akio.identify({
   userId: 'user@example.com',

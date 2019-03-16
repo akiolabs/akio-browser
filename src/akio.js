@@ -18,9 +18,8 @@ class Akio {
     return akio;
   }
 
-  constructor() {
-    // Initialize with the default config.
-    this.setUp();
+  constructor(config = {}) {
+    this.setUp(config);
   }
 
   setUp(config = {}) {
@@ -36,7 +35,7 @@ class Akio {
     // Load up the user and source information from the browser / storage.
     this.sessionId = this.storage.get({key: AKIO_SESSION_ID_KEY});
     this.userId = null;
-    this.isDisabled = false;
+    this.isDisabled = true;
   }
 
   getStorageType() {

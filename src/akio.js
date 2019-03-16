@@ -18,6 +18,11 @@ class Akio {
     return akio;
   }
 
+  constructor() {
+    // Initialize with the default config.
+    this.setUp();
+  }
+
   setUp(config = {}) {
     // Configure the SDK with user-defined config and also initialize the
     // API connection.
@@ -31,6 +36,7 @@ class Akio {
     // Load up the user and source information from the browser / storage.
     this.sessionId = this.storage.get({key: AKIO_SESSION_ID_KEY});
     this.userId = null;
+    this.isDisabled = false;
   }
 
   getStorageType() {
@@ -70,9 +76,20 @@ class Akio {
     return snakecaseKeys(getSourceInfo());
   }
 
+  enable() {
+    this.isDisabled = false;
+  }
+
+  disable() {
+    this.isDisabled = true;
+  }
+
   async init({token, ...config}) {
     // Re-initializing the SDK should re-set it up.
     this.setUp(config);
+
+    // Calling `init` enables the tracker.
+    this.enable();
 
     // If this SDK has been init'd before, it will have a stored sessionId.
     const {sessionId} = this;
@@ -108,6 +125,10 @@ class Akio {
     this.userId = userId;
     this.userAddress = userAddress;
 
+    if (this.isDisabled) {
+      return this.logger.verbose('Akio is disabled, call akio.enable() to re-enable.');
+    }
+
     if (!token || !sessionId) {
       return this.logger.error(`Called 'identify' before successful 'init'.`);
     }
@@ -132,6 +153,10 @@ class Akio {
 
   async track({event, ...properties} = {}) {
     const {token, sessionId, userId, userAddress} = this;
+
+    if (this.isDisabled) {
+      return this.logger.verbose('Akio is disabled, call akio.enable() to re-enable.');
+    }
 
     if (!token || !sessionId) {
       return this.logger.error(`Called 'track' before successful 'init'.`);

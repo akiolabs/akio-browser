@@ -3,7 +3,7 @@
   "version": "0.5.0",
   "main": "build/akio.js",
   "dependencies": {
-    "@babel/polyfill": "7.2.5",
+    "@babel/runtime": "7.3.4",
     "browser-cookies": "1.2.0",
     "detect-browser": "4.1.0",
     "handy-api": "1.5.7",
@@ -13,12 +13,16 @@
   "devDependencies": {
     "@babel/cli": "7.2.3",
     "@babel/core": "7.3.3",
+    "@babel/plugin-transform-runtime": "7.3.4",
     "@babel/preset-env": "7.3.1",
     "rimraf": "2.6.3"
   },
   "babel": {
     "presets": [
       ["@babel/preset-env", {"useBuiltIns": "usage"}]
+    ],
+    "plugins": [
+      "@babel/plugin-transform-runtime"
     ]
   },
   "scripts": {
